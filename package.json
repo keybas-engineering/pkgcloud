@@ -1,7 +1,7 @@
 {
   "name": "@france-atelier/pkgcloud",
   "description": "A provider agnostic cloud library for Node.js",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     "Ross Kukulinski <ross@kukulinski.com>",
@@ -40,7 +40,7 @@
     "fast-json-patch": "^2.2.1",
     "filed-mimefix": "^0.1.3",
     "ip": "^1.1.5",
-    "liboneandone": "github:1and1/oneandone-cloudserver-sdk-nodejs#94f1a05",
+    "liboneandone": "git+https://github.com/1and1/oneandone-cloudserver-sdk-nodejs.git#94f1a05",
     "lodash": "^4.17.21",
     "mime": "^2.5.2",
     "qs": "^6.10.1",
