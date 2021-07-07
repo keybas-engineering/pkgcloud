@@ -8,6 +8,6 @@ deploy:
   only:
     - master
   script:
-    - npm install
+    - npm ci --production
     - npm shrinkwrap
     - npm publish
