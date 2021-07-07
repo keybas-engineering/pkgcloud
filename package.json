@@ -1,7 +1,7 @@
 {
   "name": "@france-atelier/pkgcloud",
   "description": "A provider agnostic cloud library for Node.js",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     "Ross Kukulinski <ross@kukulinski.com>",
@@ -38,6 +38,7 @@
     "lodash": "^4.17.21",
     "mime": "^2.5.2",
     "qs": "^6.10.1",
+    "request": "^2.88.2",
     "through2": "^4.0.2",
     "url-join": "^4.0.0",
     "xml2js": "^0.4.23"
