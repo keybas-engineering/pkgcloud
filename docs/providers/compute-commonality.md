@@ -5,7 +5,6 @@ The following table outlines the methods that are available on the different com
 <table>
 <tr>
 <th>API</th>
-<th>AWS</th>
 <th>Azure</th>
 <th>OpenStack</th>
 <th>RAX</th>

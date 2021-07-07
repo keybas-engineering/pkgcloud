@@ -451,11 +451,6 @@ setupCreateContainerMock = function (provider, client, servers) {
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(201);
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .put('/', '<CreateBucketConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>')
-      .reply(200);
-  }
   else if (provider === 'azure') {
 
     // Override the clients getUrl method as it tries to prefix the container name onto the request
@@ -526,11 +521,6 @@ setupGetContainersMock = function (provider, client, servers) {
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('rackspace/postContainers.json'));
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .get('/')
-      .reply(200, helpers.loadFixture('amazon/list-buckets.xml'));
-  }
   else if (provider === 'azure') {
     servers.server
       .get('/?comp=list')
@@ -555,12 +545,6 @@ setupUploadStreamMock = function (provider, client, servers) {
       .reply(200)
       .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
       .reply(200, '', { 'content-length': fillerama.length + 2 });
-  }
-  else if (provider === 'amazon') {
-    servers.server
-      .put('/test-file.txt', fillerama)
-      .reply(200);
-
   }
   else if (provider === 'azure') {
     servers.server
@@ -587,17 +571,6 @@ setupBigDataUploadStreamMock = function (provider, client, servers) {
       .reply(200)
       .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/bigfile.raw?format=json')
       .reply(200, '', { 'content-length': bigFillerama.length + 2 });
-  }
-  else if (provider === 'amazon') {
-    servers.server
-      .post('/bigfile.raw?uploads')
-      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n<InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Bucket>pkgcloud-test-container</Bucket><Key>bigfile.raw</Key><UploadId>U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--</UploadId></InitiateMultipartUploadResult>', {})
-      .put('/bigfile.raw?partNumber=1&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', bigFillerama.slice(0, 5*1024*1024).toString('ascii'))
-      .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/bigfile.raw</Location><Bucket>pkgcloud-test-container</Bucket><Key>bigfile.raw</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-1&quot;</ETag></CompleteMultipartUploadResult>')
-      .put('/bigfile.raw?partNumber=2&uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', bigFillerama.slice(5*1024*1024, 10*1024*1024).toString('ascii'))
-    .reply(200, '<?xml version="1.0" encoding="UTF-8"?>\n\n<CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Location>https://pkgcloud-test-container.s3.amazonaws.com/bigfile.raw</Location><Bucket>pkgcloud-test-container</Bucket><Key>bigfile.raw</Key><ETag>&quot;b2286fe4aac65809a1b7a053d07fc99f-2&quot;</ETag></CompleteMultipartUploadResult>')
-    .post('/bigfile.raw?uploadId=U4vzbMZVEkBOyxMPHMCu7nRSUw.eNLeqK0oYOPA6BeeiDSu6OTjrsMkkTsOFav3qCpgvIJluGWe_Yi.ypTVxEg--', '<CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Part><ETag>"b2286fe4aac65809a1b7a053d07fc99f-1"</ETag><PartNumber>1</PartNumber></Part><Part><ETag>"b2286fe4aac65809a1b7a053d07fc99f-2"</ETag><PartNumber>2</PartNumber></Part></CompleteMultipartUpload>')
-    .reply(200);
   }
   else if (provider === 'azure') {
     servers.server
@@ -627,11 +600,6 @@ setupDownloadStreamMock = function (provider, client, servers) {
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, { 'content-length': fillerama.length + 2});
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .get('/test-file.txt')
-      .reply(200, fillerama, { 'content-length': fillerama.length + 2 });
-  }
   else if (provider === 'azure') {
     servers.server
       .get('/pkgcloud-test-container/test-file.txt')
@@ -659,11 +627,6 @@ setupBigDataDownloadStreamMock = function (provider, client, servers) {
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/bigfile.raw')
       .reply(200, bigFillerama.toString('ascii'));
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .get('/bigfile.raw')
-      .reply(200, bigFillerama.toString('ascii'));
-  }
   else if (provider === 'azure') {
     servers.server
       .get('/pkgcloud-test-container/bigfile.raw')
@@ -687,11 +650,6 @@ setupGetFileMock = function (provider, client, servers) {
   if (provider === 'rackspace' || provider === 'openstack') {
     servers.server
       .head('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt?format=json')
-      .reply(200, '', { 'content-length': fillerama.length + 2 });
-  }
-  else if (provider === 'amazon') {
-    servers.server
-      .head('/test-file.txt')
       .reply(200, '', { 'content-length': fillerama.length + 2 });
   }
   else if (provider === 'azure') {
@@ -725,11 +683,6 @@ setupGetFilesMock = function (provider, client, servers) {
         content_type: 'text/plain'
       }]);
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .get('/')
-      .reply(200, helpers.loadFixture('amazon/list-bucket-files.xml'));
-  }
   else if (provider === 'azure') {
     servers.server
       .get('/pkgcloud-test-container?restype=container&comp=list')
@@ -756,11 +709,6 @@ setupRemoveFileMock = function (provider, client, servers) {
     servers.server
       .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
       .reply(204, '');
-  }
-  else if (provider === 'amazon') {
-    servers.server
-      .delete('/test-file.txt')
-      .reply(204);
   }
   else if (provider === 'azure') {
     servers.server
@@ -825,15 +773,6 @@ setupDestroyContainerMock = function (provider, client, servers) {
       .delete('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
       .reply(204);
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .get('/')
-      .reply(200, helpers.loadFixture('amazon/list-bucket-files.xml'), {})
-      .delete('/')
-      .reply(204)
-      .delete('/test-file.txt')
-      .reply(204);
-  }
   else if (provider === 'azure') {
     servers.server
       .delete('/pkgcloud-test-container?restype=container')
@@ -875,11 +814,6 @@ setupGetContainers2Mock = function (provider, client, servers) {
     servers.server
       .get('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00?format=json')
       .reply(200, helpers.loadFixture('rackspace/preContainers.json'));
-  }
-  else if (provider === 'amazon') {
-    servers.server
-      .get('/')
-      .reply(200, helpers.loadFixture('amazon/list-buckets2.xml'));
   }
   else if (provider === 'azure') {
     servers.server

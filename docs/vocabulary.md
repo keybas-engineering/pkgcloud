@@ -8,7 +8,6 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
   <tr>
     <th>pkgcloud</th>
     <th>OpenStack</th>
-    <th>Amazon</th>
     <th>Azure</th>
     <th>Rackspace</th>
     <th>DigitalOcean</th>
@@ -17,7 +16,6 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
   <tr>
     <td>Server</td>
     <td>Server</td>
-    <td>Machine</td>
     <td>Instance</td>
     <td>Virtual Machine</td>
     <td>Server</td>
@@ -27,7 +25,6 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
   <tr>
     <td>Image</td>
     <td>Image</td>
-    <td>Dataset</td>
     <td>AMI</td>
     <td>Image</td>
     <td>Image</td>
@@ -37,7 +34,6 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
   <tr>
     <td>Flavor</td>
     <td>Flavor</td>
-    <td>Package</td>
     <td>InstanceType</td>
     <td>RoleSize</td>
     <td>Flavor</td>
@@ -52,21 +48,18 @@ When considering all IaaS providers as a whole, their vocabulary is somewhat dis
   <tr>
     <th>pkgcloud</th>
     <th>OpenStack</th>
-    <th>Amazon</th>
     <th>Azure</th>
     <th>Rackspace</th>
   </tr>
   <tr>
     <td>Container</td>
     <td>Container</td>
-    <td>Bucket</td>
     <td>Container</td>
     <td>Container</td>
   </tr>
   <tr>
     <td>File</td>
     <td>StorageObject</td>
-    <td>Object</td>
     <td>Blob</td>
     <td>File</td>
   </tr>

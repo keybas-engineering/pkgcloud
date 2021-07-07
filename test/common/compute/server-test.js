@@ -277,15 +277,6 @@ setupImagesMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/images/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/images.json');
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .filteringRequestBody(helpers.authFilter)
-      .post('/',
-        { Action: 'DescribeImages',
-          'Owner.1': 'self' },
-        { 'User-Agent': client.userAgent })
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/images.xml');
-  }
   else if (provider === 'azure') {
     servers.server
       .get('/azure-account-subscription-id/services/images')
@@ -384,38 +375,6 @@ setupServerMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .filteringRequestBody(helpers.authFilter)
-      .post('/', {
-        'Action': 'RunInstances',
-        'ImageId': 'ami-85db1cec',
-        'InstanceType': 'm1.small',
-        'MaxCount': '1',
-        'MinCount': '1',
-        'UserData': 'eyJuYW1lIjoiY3JlYXRlLXRlc3QtaWRzMiJ9'
-      }, { 'User-Agent': client.userAgent })
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/run-instances.xml')
-//      .post('/?Action=DescribeInstances')
-//      .replyWithFile(200, __dirname + '/../../fixtures/amazon/pending-server.xml')
-      .post('/', {
-        'Action':'DescribeInstanceAttribute',
-        'Attribute': 'userData',
-        'InstanceId': 'i-1d48637b'
-      }, { 'User-Agent': client.userAgent })
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server-attr2.xml')
-      .post('/', {
-        'Action': 'DescribeInstances',
-        'Filter.1.Name': 'instance-state-code',
-        'Filter.1.Value.1': '0',
-        'Filter.1.Value.2': '16',
-        'Filter.1.Value.3': '32',
-        'Filter.1.Value.4': '64',
-        'Filter.1.Value.5': '80',
-        'InstanceId.1': 'i-1d48637b'
-      }, { 'User-Agent': client.userAgent })
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml');
-  }
   else if (provider === 'azure') {
 
     var requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5';
@@ -466,14 +425,6 @@ setupGetServersMock = function (client, provider, servers) {
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/detail')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverList.json');
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .filteringRequestBody(helpers.authFilter)
-      .post('/', {
-        Action: 'DescribeInstances'
-      }, { 'User-Agent': client.userAgent })
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml');
-  }
   else if (provider === 'azure') {
 
     var requestId = 'b67cc525-ecc5-4661-8fd6-fb3e57d724f5';
@@ -507,12 +458,6 @@ setupGetServerMock = function (client, provider, servers) {
     servers.server
       .get('/v2/72e90ecb69c44d0296072ea39e537041/servers/5a023de8-957b-4822-ad84-8c7a9ef83c07')
       .replyWithFile(200, __dirname + '/../../fixtures/openstack/serverCreated2.json');
-  }
-  else if (provider === 'amazon') {
-    servers.server
-      .filteringRequestBody(helpers.authFilter)
-      .post('/?Action=DescribeInstances', {})
-      .replyWithFile(200, __dirname + '/../../fixtures/amazon/running-server.xml');
   }
   else if (provider === 'azure') {
 

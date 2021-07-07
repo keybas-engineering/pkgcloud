@@ -1,7 +1,7 @@
 {
   "name": "@france-atelier/pkgcloud",
   "description": "A provider agnostic cloud library for Node.js",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     "Ross Kukulinski <ross@kukulinski.com>",
@@ -17,8 +17,6 @@
     "cloud computing",
     "api",
     "rackspace",
-    "aws",
-    "amazon",
     "azure",
     "google",
     "iaas",
@@ -34,9 +32,8 @@
   "dependencies": {
     "@google-cloud/storage": "^5.8.5",
     "async": "^3.2.0",
-    "aws-sdk": "^2.918.0",
     "errs": "^0.3.2",
-    "eventemitter2": "^5.0.1",
+    "eventemitter2": "6.2.1",
     "fast-json-patch": "^2.2.1",
     "filed-mimefix": "^0.1.3",
     "ip": "^1.1.5",
@@ -49,11 +46,11 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "coveralls": "^3.1.0",
+    "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
     "hock": "^1.4.1",
     "jshint": "^2.13.0",
-    "mocha": "^8.4.0",
+    "mocha": "^9.0.2",
     "nyc": "^15.1.0",
     "should": "^13.2.3"
   },

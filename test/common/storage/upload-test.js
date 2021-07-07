@@ -144,11 +144,6 @@ setupUploadStreamError = function (provider, client, servers) {
       .put('/v1/MossoCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt', 'foo')
       .reply(400);
   }
-  else if (provider === 'amazon') {
-    servers.server
-      .put('/test-file.txt', 'foo')
-      .reply(400);
-  }
   else if (provider === 'azure') {
 
     // Override the clients getUrl method as it tries to prefix the container name onto the request

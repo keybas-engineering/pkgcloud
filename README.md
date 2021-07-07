@@ -116,14 +116,12 @@ Supporting every API for every cloud service provider in Node.js is a huge under
 If a service does not have at least two providers, it is considered a *beta* interface; We reserve the right to improve the API as multiple providers will allow generalization to be better determined.
 
 * **[Compute](#compute)**
-  * [Amazon](docs/providers/amazon.md#using-compute)
   * [Azure](docs/providers/azure.md#using-compute)
   * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
   * [HP](docs/providers/hp/compute.md)
   * [Openstack](docs/providers/openstack/compute.md)
   * [Rackspace](docs/providers/rackspace/compute.md)
 * **[Storage](#storage)**
-  * [Amazon](docs/providers/amazon.md#using-storage)
   * [Azure](docs/providers/azure.md#using-storage)
   * [Google](docs/providers/google.md)
   * [HP](docs/providers/hp/storage.md)
@@ -168,7 +166,6 @@ The `pkgcloud.compute` service is designed to make it easy to provision and work
 
 Each compute provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Amazon](docs/providers/amazon.md#using-compute)
 * [Azure](docs/providers/azure.md#using-compute)
 * [DigitalOcean](docs/providers/digitalocean.md#using-compute)
 * [HP](docs/providers/hp/compute.md)
@@ -215,7 +212,6 @@ To get started with a `pkgcloud.storage` client just create one:
 
 Each storage provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
-* [Amazon](docs/providers/amazon.md#using-storage)
 * [Azure](docs/providers/azure.md#using-storage)
 * [Google](docs/providers/google.md#using-storage)
 * [HP](docs/providers/hp/storage.md)
