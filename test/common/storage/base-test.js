@@ -15,7 +15,6 @@ var fs = require('fs'),
     hock = require('hock'),
     http = require('http'),
     urlJoin = require('url-join'),
-    request = require('request'),
     providers = require('../../configs/providers.json'),
     Container = require('../../../lib/pkgcloud/core/storage/container').Container,
     File = require('../../../lib/pkgcloud/core/storage/file').File,
@@ -36,13 +35,6 @@ providers.filter(function (provider) {
   describe('pkgcloud/common/storage/base [' + provider + ']', function () {
 
     var config = null;
-
-    if (!mock && provider === 'google') {
-      config = {
-        keyFilename: process.env.GCLOUD_KEYFILE,
-        projectId: process.env.GCLOUD_PROJECT_ID
-      };
-    }
 
     var client = helpers.createClient(provider, 'storage', config),
       context = {},
@@ -125,16 +117,6 @@ providers.filter(function (provider) {
     it('the upload() method with container and filename should succeed', function (done) {
 
       if (mock) {
-        // FIXME: Added 'google' until finding a way to "simulate" upload
-        if (provider === 'google') {
-          // TODO: Remove once 'google' upload & download tests are functional
-          context.file = {
-            name: 'test-file.txt',
-            size: Buffer.byteLength(fillerama)
-          };
-          return done();
-        }
-
         setupUploadStreamMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -173,11 +155,6 @@ providers.filter(function (provider) {
     it('the download() method with container and filename should succeed', function (done) {
 
       if (mock) {
-        // FIXME: Added 'google' until finding a way to "simulate" download
-        if (provider === 'google') {
-          return done();
-        }
-
         setupDownloadStreamMock(provider, client, {
           server: hockInstance,
           authServer: authHockInstance
@@ -270,9 +247,8 @@ providers.filter(function (provider) {
     it('the upload() method with large file should succeed', function (done) {
 
       if (mock) {
-        // TODO make it work for google
         // TODO make it work for azure - no idea why it fails on node 0.10 (it passes for node 6.8)
-        if (['google', 'azure'].indexOf(provider) !== -1) {
+        if (['azure'].indexOf(provider) !== -1) {
           return done();
         }
         setupBigDataUploadStreamMock(provider, client, {
@@ -311,9 +287,8 @@ providers.filter(function (provider) {
     it('the download() method with large file should succeed', function (done) {
 
       if (mock) {
-        // TODO make it work for google
         // TODO make it work for azure - no idea why it fails on node 0.10 (it passes for node 6.8)
-        if (['google', 'azure'].indexOf(provider) !== -1) {
+        if (['azure'].indexOf(provider) !== -1) {
           return done();
         }
         setupBigDataDownloadStreamMock(provider, client, {
@@ -467,24 +442,6 @@ setupCreateContainerMock = function (provider, client, servers) {
       .put('/pkgcloud-test-container?restype=container')
       .reply(201, '', helpers.azureResponseHeaders());
   }
-  else if (provider === 'google') {
-    servers.server
-      .post('/storage/v1/b?project=test-project', {
-        name: 'pkgcloud-test-container'
-      })
-      .replyWithFile(200, __dirname + '/../../fixtures/google/create-bucket.json');
-    
-    client.storage.baseUrl = client.storage.baseUrl.replace(/.*\.com/, 'http://localhost:12345');
-    client.storage.makeAuthenticatedRequest = function (reqOpts, callback) {
-      reqOpts.uri = reqOpts.uri.replace(/.*\.com/, 'http://localhost:12345');
-      return request(reqOpts, callback);
-    };
-
-    client.storage.authClient.request = function (reqOpts) {
-      reqOpts.url = reqOpts.url.replace(/.*\.com/, 'http://localhost:12345');
-      return request(reqOpts);
-    };
-  }
   else if (provider === 'hp') {
     servers.authServer
       .post('/v2.0/tokens', {
@@ -525,11 +482,6 @@ setupGetContainersMock = function (provider, client, servers) {
     servers.server
       .get('/?comp=list')
       .reply(200, helpers.loadFixture('azure/list-containers.xml'),helpers.azureResponseHeaders());
-  }
-  else if (provider === 'google') {
-    servers.server
-      .get('/storage/v1/b?project=test-project')
-      .replyWithFile(200, __dirname + '/../../fixtures/google/get-buckets.json');
   }
   else if (provider === 'hp') {
     servers.server
@@ -605,15 +557,6 @@ setupDownloadStreamMock = function (provider, client, servers) {
       .get('/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2,'content-type': 'text/plain'}));
   }
-  else if (provider === 'google') {
-    servers.server
-      .get('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
-      .reply(200, { mediaLink: 'http://localhost:12345/mediaLink' })
-      .get('/storage/v1/b/pkgcloud-test-container/o/test-file.txt?alt=media')
-      .reply(200, { mediaLink: 'http://localhost:12345/mediaLink' })
-      .get('/mediaLink')
-      .reply(200, fillerama);
-  }
   else if (provider === 'hp') {
     servers.server
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/test-file.txt')
@@ -632,13 +575,6 @@ setupBigDataDownloadStreamMock = function (provider, client, servers) {
       .get('/pkgcloud-test-container/bigfile.raw')
       .reply(200, bigFillerama.toString('ascii'), helpers.azureGetFileResponseHeaders({'content-type': 'text/plain'}));
   }
-  else if (provider === 'google') {
-    servers.server
-      .get('/storage/v1/b/pkgcloud-test-container/o/bigfile.raw')
-      .reply(200, { mediaLink: 'http://localhost:12345/mediaLink' })
-      .get('/mediaLink')
-      .reply(200, bigFillerama.toString('ascii'));
-  }
   else if (provider === 'hp') {
     servers.server
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container/bigfile.raw')
@@ -656,15 +592,6 @@ setupGetFileMock = function (provider, client, servers) {
     servers.server
       .get('/pkgcloud-test-container/test-file.txt')
       .reply(200, fillerama, helpers.azureGetFileResponseHeaders({'content-length': fillerama.length + 2, 'content-type': 'text/plain'}));
-  }
-  else if (provider === 'google') {
-    client.storage.request = function (reqOpts, callback) {
-      reqOpts.uri = urlJoin('http://localhost:12345/storage/v1', reqOpts.uri);
-      return request(reqOpts, (err, response, body) => callback(err, body? JSON.parse(body): body));
-    };
-    servers.server
-      .get('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
-      .replyWithFile(200, __dirname + '/../../fixtures/google/get-file.json');
   }
   else if (provider === 'hp') {
     servers.server
@@ -688,11 +615,6 @@ setupGetFilesMock = function (provider, client, servers) {
       .get('/pkgcloud-test-container?restype=container&comp=list')
       .reply(200, helpers.loadFixture('azure/list-container-files.xml'), helpers.azureResponseHeaders({'content-type': 'application/xml'}));
   }
-  else if (provider === 'google') {
-    servers.server
-      .get('/storage/v1/b/pkgcloud-test-container/o')
-      .replyWithFile(200, __dirname + '/../../fixtures/google/get-files.json');
-  }
   else if (provider === 'hp') {
     servers.server
       .get('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container?format=json')
@@ -714,11 +636,6 @@ setupRemoveFileMock = function (provider, client, servers) {
     servers.server
       .delete('/pkgcloud-test-container/test-file.txt')
       .reply(202, '', helpers.azureDeleteResponseHeaders());
-  }
-  else if (provider === 'google') {
-    servers.server
-      .delete('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
-      .reply(204, {});
   }
   else if (provider === 'hp') {
     servers.server
@@ -778,15 +695,6 @@ setupDestroyContainerMock = function (provider, client, servers) {
       .delete('/pkgcloud-test-container?restype=container')
       .reply(202, '', helpers.azureDeleteResponseHeaders());
   }
-  else if (provider === 'google') {
-    servers.server
-      .get('/storage/v1/b/pkgcloud-test-container/o')
-      .replyWithFile(200, __dirname + '/../../fixtures/google/get-files.json')
-      .delete('/storage/v1/b/pkgcloud-test-container/o/test-file.txt')
-      .reply(204, {})
-      .delete('/storage/v1/b/pkgcloud-test-container')
-      .reply(204, {});
-  }
   else if (provider === 'hp') {
     servers.server
       .head('/v1/HPCloudFS_00aa00aa-aa00-aa00-aa00-aa00aa00aa00/pkgcloud-test-container')
@@ -819,11 +727,6 @@ setupGetContainers2Mock = function (provider, client, servers) {
     servers.server
       .get('/?comp=list')
       .reply(200, helpers.loadFixture('azure/list-containers2.xml'), helpers.azureResponseHeaders());
-  }
-  else if (provider === 'google') {
-    servers.server
-      .get('/storage/v1/b?project=test-project')
-      .replyWithFile(200, __dirname + '/../../fixtures/google/get-buckets.json');
   }
   else if (provider === 'hp') {
     servers.server

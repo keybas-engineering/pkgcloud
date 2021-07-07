@@ -123,7 +123,6 @@ If a service does not have at least two providers, it is considered a *beta* int
   * [Rackspace](docs/providers/rackspace/compute.md)
 * **[Storage](#storage)**
   * [Azure](docs/providers/azure.md#using-storage)
-  * [Google](docs/providers/google.md)
   * [HP](docs/providers/hp/storage.md)
   * [Openstack](docs/providers/openstack/storage.md)
   * [Rackspace](docs/providers/rackspace/storage.md)
@@ -213,7 +212,6 @@ To get started with a `pkgcloud.storage` client just create one:
 Each storage provider takes different credentials to authenticate; these details about each specific provider can be found below:
 
 * [Azure](docs/providers/azure.md#using-storage)
-* [Google](docs/providers/google.md#using-storage)
 * [HP](docs/providers/hp/storage.md)
 * [Openstack](docs/providers/openstack/storage.md)
 * [Rackspace](docs/providers/rackspace/storage.md)
