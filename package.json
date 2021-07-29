@@ -1,7 +1,7 @@
 {
   "name": "@france-atelier/pkgcloud",
-  "description": "A provider agnostic cloud library for Node.js",
-  "version": "2.5.1",
+  "description": "A provider agnostic cloud library for Node.js - forked",
+  "version": "2.5.2",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
   "contributors": [
     "Ross Kukulinski <ross@kukulinski.com>",
@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/pkgcloud/pkgcloud.git"
+    "url": "git+ssh://git@gitlab.com/france-atelier/pkgcloud.git"
   },
   "keywords": [
     "cloud",
