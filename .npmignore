@@ -6,10 +6,12 @@
 .idea
 azure_error
 coverage.html
-.coveralls.yml
 pkgcloud.lcov*
 node-jscoverage
 .nyc_output
 test/*
 *.tgz
 *.tar.gz
+.gitattributes
+.jshintrc
+.*.yml

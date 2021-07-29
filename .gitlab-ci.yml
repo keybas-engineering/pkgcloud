@@ -1,13 +1,14 @@
-image: node:alpine
-
 stages:
   - deploy
 
-deploy:
+# See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/npm.gitlab-ci.yml
+publish:
+  image: node:alpine
   stage: deploy
   only:
     - master
+  before_script:
+    - echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
+    - echo "${CI_API_V4_URL#http*:}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}" >> .npmrc
   script:
-    - npm ci --production
-    - npm shrinkwrap
     - npm publish
