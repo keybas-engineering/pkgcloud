@@ -1,0 +1,24 @@
+name: publish
+on:
+ push:
+  branches:
+  - master
+env:
+  TOKEN_WR_PACKAGE_REGISTRY: ${{ secrets.TOKEN_WR_PACKAGE_REGISTRY }}
+jobs:
+ publish:
+   runs-on: ubuntu-latest
+   steps:
+   - uses: actions/checkout@v3
+   - name: Setup Node.js
+     uses: actions/setup-node@v3
+     with:
+       node-version: 16
+   - name: Setup npmrc file
+     run: |
+       echo "@keybas-engineering:registry=https://npm.pkg.github.com" > .npmrc
+       echo //npm.pkg.github.com/:_authToken=\"${{env.TOKEN_WR_PACKAGE_REGISTRY}}\" >> .npmrc
+       
+   - name: Publish package
+     run: |
+       npm publish
