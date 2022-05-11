@@ -345,7 +345,8 @@ setupUpdateServiceMock = function (client, servers) {
       { op: 'remove', path: '/client' },
       { op: 'remove', path: '/listenerTree' },
       { op: 'remove', path: '/wildcard' },
-      { op: 'remove', path: '/_maxListeners' },
+      // _maxListeners removed since eventemitter2 version 6.3
+      // { op: 'remove', path: '/_maxListeners' },
       { op: 'remove', path: '/delimiter' },
       { op: 'remove', path: '/_conf' },
       { op: 'remove', path: '/verboseMemoryLeak' },
